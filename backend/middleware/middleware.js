@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 
 function authMiddleware(req,res, next) {
-  const authentication = req.headers.Authorization;
+  const authentication = req.headers.authorization;
 
   if(!authentication) {
     return res.status(401).json({
@@ -11,11 +11,13 @@ function authMiddleware(req,res, next) {
   }
 
   const token = authentication.split(' ')[1];
+  console.log(token);
+  
 
   try {
     const decoded  = jwt.verify(token, process.env.SECRET_KEY);
-
-    if(!decoded.id) {
+    console.log(decoded);
+    if(decoded.id) {
       req.id = decoded.id;
       next();
     } else {
@@ -24,6 +26,8 @@ function authMiddleware(req,res, next) {
       });
     }
   } catch (error) {
+    // console.log(error);
+    
     return res.status(401).json({
       message: "Unauthorized"
     });

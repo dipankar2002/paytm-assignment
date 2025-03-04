@@ -1,6 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const userSchema = require('../zod/user');
+const { signupBody, signinBody, updateBody } = require('../zod/user');
 const User = require('../db');
 const authMiddleware = require('../middleware/middleware');
 const router = express.Router();
@@ -9,7 +9,7 @@ router.put('/', authMiddleware ,async (req, res) => {
   const { password, firstName, lastName } = req.body;
   const id = req.id;
 
-  const userValidation = userSchema.safeParse({ password, firstName, lastName });
+  const userValidation = updateBody.safeParse({ password, firstName, lastName });
   if(!userValidation.success) {
     return res.status(411).json({
       message: "Error while updating information"
@@ -29,6 +29,35 @@ router.put('/', authMiddleware ,async (req, res) => {
   });
 });
 
+router.get("/bulk", async (req, res) => {
+  const filter = req.query.filter || "";
+  
+  if(filter) {
+    const users = await User.find({
+      $or: [{
+        firstName: {
+          "$regex": filter
+        }
+      }, {
+        lastName: {
+          "$regex": filter
+        }
+      }]
+    })
+    return res.status(200).json({
+      user: users.map(user => ({
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        _id: user._id
+      }))
+    })
+  }
+  const user = await User.find();
+  res.status(200).json(user);
+})
+
+// ------------ This code by me -----------
 // async function findKey(value) {
 //   const user = await User.findOne();
 //   if(!user) {
@@ -42,36 +71,6 @@ router.put('/', authMiddleware ,async (req, res) => {
 //   }
 //   return null;
 // }
-
-router.get("/bulk", async (req, res) => {
-  const filter = req.query.filter || "";
-  
-  if(filter) {
-    const users = await User.find({
-        $or: [{
-            firstName: {
-                "$regex": filter
-            }
-        }, {
-            lastName: {
-                "$regex": filter
-            }
-        }]
-    })
-    return res.status(200).json({
-        user: users.map(user => ({
-            username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            _id: user._id
-        }))
-    })
-  }
-  const user = await User.find();
-  res.status(200).json(user);
-})
-
-// ------------ This code by me -----------
 // router.get('/bulk', authMiddleware, async (req, res) => {
 //   const filter = req.query.filter;
 //   const id = req.id;
@@ -89,7 +88,10 @@ router.get("/bulk", async (req, res) => {
 
 router.post('/signin', async (req, res) => {
   const {username, password} = req.body;
-  const userValidation = userSchema.safeParse({ username, password });
+  const userValidation = signinBody.safeParse({ 
+    username: username, 
+    password: password
+  });
 
   if (!userValidation.success) {
     return res.status(411).json({
@@ -97,10 +99,10 @@ router.post('/signin', async (req, res) => {
     });
   }
 
-  const findUser = await User.findOne({username: username});
-  const token = jwt.sign({ id: findUser._id }, process.env.SECRET_KEY);
+  const findUser = await User.findOne({username: username, password: password});
   if(findUser){
-    res.status(200).json({
+    const token = jwt.sign({ id: findUser._id }, process.env.SECRET_KEY);
+    return res.status(200).json({
       token: token
     });
   }
@@ -111,7 +113,7 @@ router.post('/signin', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
   const { username, password, firstName, lastName } = req.body;
-  const userValidation = userSchema.safeParse({ 
+  const userValidation = signupBody.safeParse({ 
     username: username, 
     password: password, 
     firstName: firstName, 
