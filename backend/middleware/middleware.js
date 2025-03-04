@@ -11,12 +11,9 @@ function authMiddleware(req,res, next) {
   }
 
   const token = authentication.split(' ')[1];
-  console.log(token);
-  
 
   try {
     const decoded  = jwt.verify(token, process.env.SECRET_KEY);
-    console.log(decoded);
     if(decoded.id) {
       req.id = decoded.id;
       next();
