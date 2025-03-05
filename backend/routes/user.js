@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { signupBody, signinBody, updateBody } = require('../zod/user');
 const { User, Account} = require('../db');
 const authMiddleware = require('../middleware/middleware');
+const { hashPassword, comparePassword } = require('../middleware/hashPass');
 const router = express.Router();
 
 router.put('/', authMiddleware ,async (req, res) => {
@@ -92,15 +93,29 @@ router.post('/signin', async (req, res) => {
     username: username, 
     password: password
   });
-
+  
   if (!userValidation.success) {
     return res.status(411).json({
       message: "Incruct inputs"
     });
   }
+  
+  const findUser = await User.findOne({username: username});
+  if(!findUser) {
+    return res.status(411).json({ 
+      message: "User does not exists" 
+    });
+  }
 
-  const findUser = await User.findOne({username: username, password: password});
-  if(findUser){
+  const matchPassword = await comparePassword(password,findUser.password);
+
+  if(!matchPassword) {
+    return res.status(411).json({ 
+      message: "Wrong Password" 
+    });
+  }
+
+  if(matchPassword){
     const token = jwt.sign({ id: findUser._id }, process.env.SECRET_KEY);
     return res.status(200).json({
       token: token
@@ -133,9 +148,11 @@ router.post('/signup', async (req, res) => {
     });
   } 
 
+  const hashedPassword = await hashPassword(password);
+
   const userData = await User.create({
     username: username,
-    password: password,
+    password: hashedPassword,
     firstName: firstName,
     lastName: lastName
   });
