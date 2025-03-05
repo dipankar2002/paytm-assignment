@@ -1,9 +1,85 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const [ firstName, setFirstName ] = useState("");
+  const [ lastName, setLastName ] = useState("");
+  const [ email, setEmail ] = useState("");
+  const [ password, setPassword ] = useState("");
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch('http://localhost:3000/api/v1/user/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        username: email,
+        password: password
+      })
+    });
+    const data = await response.json();
+
+    if(data.token) {
+      localStorage.setItem('token', data.token);
+      navigate('/dashboard', { replace: true });
+
+    } else {
+      alert(data.message);
+    }
+  }
+
   return (
-    <div>
-      
+    <div className='bg-gray-200 flex justify-center items-center w-[100vw] h-[100vh]'>
+      <form 
+        className='bg-white w-[30%] py-10 rounded-md text-center shadow-2xl'
+        onSubmit={onSubmit}
+      >
+        <header className='text-center pb-6 px-10'>
+          <h1 className=' text-3xl font-bold pb-2'>Sign Up</h1>
+          <div className='text-xl text-gray-600'>Enter your information to create an account</div>
+        </header>
+        <InputCompo value={firstName} setValue={setFirstName}>
+          First Name
+        </InputCompo>
+        <InputCompo value={lastName} setValue={setLastName}>
+          Last Name
+        </InputCompo>
+        <InputCompo value={email} setValue={setEmail}>
+          Email
+        </InputCompo>
+        <InputCompo value={password} setValue={setPassword}>
+          Password
+        </InputCompo>
+        <button className="bg-blue-500 w-[80%] py-2 text-white font-bold rounded-md mt-6">Sign Up</button>
+        <footer className='text-center pt-2'>
+          Already have an account?
+          <Link
+            to="/signin"
+            className='text-blue-500 mx-2'
+          > Sign In</Link>
+        </footer>
+      </form>
+    </div>
+  )
+}
+
+function InputCompo({children, value, setValue}) {
+  
+  return (
+    <div className=' grid grid-cols-1 w-[80%] mx-auto text-left font-bold'>
+      {children}
+      <input 
+        className='border-2 border-black px-2 py-1 my-2 rounded-md font-normal'
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={"Enter "+String(children).toLowerCase()}
+        required
+      />
     </div>
   )
 }
