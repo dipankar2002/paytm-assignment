@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema({
     maxlength: 50,
     required: true
   },
+  imageUrl: {
+    type: String,
+    trim: true,
+    required: true
+  }
 });
 
 const acountSchema = new mongoose.Schema({
