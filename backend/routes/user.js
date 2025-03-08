@@ -13,20 +13,21 @@ router.put('/', authMiddleware ,async (req, res) => {
   const userValidation = updateBody.safeParse({ password, firstName, lastName });
   if(!userValidation.success) {
     return res.status(411).json({
-      message: "Error while updating information"
+      message: "Error while updating information",
+      success: false
     });
   }
 
   const oldUser = User.findOne({_id: id});
 
-  const updateUser = await User.findOneAndUpdate({_id: id}, {
+  await User.updateOne({_id: id}, {
     password: password? password: oldUser.password,
     firstName: firstName? firstName: oldUser.firstName,
     lastName: lastName? lastName: oldUser.lastName
   })
-  console.log(updateUser);
   res.status(200).json({
-    message: "User information updated successfully"
+    message: "User information updated successfully",
+    success: true
   });
 });
 
@@ -46,16 +47,27 @@ router.get("/bulk", async (req, res) => {
       }]
     })
     return res.status(200).json({
-      user: users.map(user => ({
+      data: users.map(user => ({
         username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
+        imageUrl: user.imageUrl,
         _id: user._id
-      }))
+      })),
+      success: true
     })
   }
-  const user = await User.find();
-  res.status(200).json(user);
+  const usersAll = await User.find();
+  res.status(200).json({
+    data: usersAll.map(user => ({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      imageUrl: user.imageUrl,
+      _id: user._id
+    })),
+    success: true
+  });
 })
 
 // ------------ This code by me -----------
@@ -87,6 +99,28 @@ router.get("/bulk", async (req, res) => {
 //   res.status(200).json(user);
 // });
 
+router.post('/currentUser', authMiddleware, async (req, res) => {
+  const id = req.id;
+  const user = await User.findOne({_id: id});
+  
+  if(!user) {
+    return res.status(411).json({
+      message: "User not found",
+      success: false
+    });
+  }
+  res.status(200).json({
+    data: {
+      _id: user._id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      imageUrl: user.imageUrl
+    },
+    success: true
+  });
+});
+
 router.post('/signin', async (req, res) => {
   const {username, password} = req.body;
   const userValidation = signinBody.safeParse({ 
@@ -96,14 +130,16 @@ router.post('/signin', async (req, res) => {
   
   if (!userValidation.success) {
     return res.status(411).json({
-      message: "Incruct inputs"
+      message: "Incruct inputs",
+      success: false
     });
   }
   
   const findUser = await User.findOne({username: username});
   if(!findUser) {
     return res.status(411).json({ 
-      message: "User does not exists" 
+      message: "User does not exists",
+      success: false
     });
   }
 
@@ -111,40 +147,49 @@ router.post('/signin', async (req, res) => {
 
   if(!matchPassword) {
     return res.status(411).json({ 
-      message: "Wrong Password" 
+      message: "Wrong Password",
+      success: false
     });
   }
 
   if(matchPassword){
     const token = jwt.sign({ id: findUser._id }, process.env.SECRET_KEY);
     return res.status(200).json({
-      token: token
+      token: token,
+      success: true
     });
   }
   res.status(411).json({
-    message: "Error while logging in"
+    message: "Error while logging in",
+    success: false
   });
 });
 
 router.post('/signup', async (req, res) => {
   const { username, password, firstName, lastName } = req.body;
+  const imageUrl = `https://i.pravatar.cc/48?u=${Date.now()}`;
+  
+  
   const userValidation = signupBody.safeParse({ 
-    username: username, 
-    password: password, 
-    firstName: firstName, 
-    lastName: lastName
+    username: username,
+    password: password,
+    firstName: firstName,
+    lastName: lastName,
+    imageUrl: imageUrl
   });
 
   if (!userValidation.success) {
     return res.status(411).json({
-      message: "Email already taken / Incorrect inputs"
+      message: "Email already taken / Incorrect inputs",
+      success: false
     });
   }
 
   const findUser = await User.findOne({username: username});
   if (findUser) {
     return res.status(411).json({
-      message: "Email already taken / Incorrect inputs"
+      message: "Email already taken / Incorrect inputs",
+      success: false
     });
   } 
 
@@ -154,7 +199,8 @@ router.post('/signup', async (req, res) => {
     username: username,
     password: hashedPassword,
     firstName: firstName,
-    lastName: lastName
+    lastName: lastName,
+    imageUrl: imageUrl
   });
 
   await Account.create({
@@ -166,7 +212,8 @@ router.post('/signup', async (req, res) => {
 
   res.status(200).json({
     message: "User created successfully",
-    token: token
+    token: token,
+    success: true
   });
 });
 
