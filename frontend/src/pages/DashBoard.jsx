@@ -76,7 +76,7 @@ export default function DashBoard() {
           />
         </div>
       </Navbar>
-      <main className='bg-white w-[99%] mx-auto my-2 p-4 rounded-md shadow-md'>
+      <main className='bg-white w-[99%] h-[84vh] mx-auto my-2 p-4 rounded-md shadow-md'>
         <Balance/>
         <UsersCompo currentUserId={currentUser._id}/>
       </main>
