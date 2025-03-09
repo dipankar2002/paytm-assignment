@@ -6,16 +6,30 @@ import { mainUrl } from '../Api/apiFetch';
 export default function UsersCompo({currentUserId}) {
   const [ users, setUsers ] = useState([]);
   const [ filter, setFilter ] = useState("");
+  const [ loading, setLoading ] = useState(true);
 
 
   useEffect(() => {
-    async function fetctUsers() {
-      const response = await axios.get(`${mainUrl}/api/v1/user/bulk?filter=` + filter.toLowerCase());
-      const filterUser = await (response.data.data).filter((ele) => ele._id !== currentUserId);
-      setUsers(filterUser);
+    let isMounted = true;
+    async function fetchUsers() {
+      try {
+        const queryParam = filter ? `?filter=${filter.toLowerCase()}` : "";
+        const response = await axios.get(`${mainUrl}/api/v1/user/bulk${queryParam}`);
+  
+        if (isMounted) {
+          setLoading(false);
+          setUsers(response.data.data.filter(ele => ele._id !== currentUserId));
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
     }
-    fetctUsers();
-  },[filter]);
+    fetchUsers();
+    return () => {
+      isMounted = false; // Prevents state update if component unmounts
+    };
+  }, [filter]); // Still dependent on filter, but always fetches users
+  
 
   return (
     <div className='mx-6 mt-2'>
@@ -30,11 +44,12 @@ export default function UsersCompo({currentUserId}) {
         />
         {filter && 
           <button 
-            className=' font-bold text-xl mr-3' 
+            className=' font-bold text-xl mr-3'
             onClick={()=>setFilter("")}
           >X</button>}
       </search>
       <main>
+          {loading && <h1 className='text-black text-4xl text-center'>Loading...</h1>}
           {users.filter((ele) => ele._id !== currentUserId).map((ele,i) => 
             <ShowUsers 
               key={i}

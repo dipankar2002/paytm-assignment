@@ -14,6 +14,7 @@ const signinBody = zod.object({
 })
 
 const updateBody = zod.object({
+  username: zod.string().email(),
   password: zod.string(),
   firstName: zod.string(),
   lastName: zod.string()

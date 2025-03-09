@@ -17,7 +17,7 @@ export default function DashBoard() {
     if (storedToken) {
       setToken(storedToken);
     } else {
-      navigate('/signin');
+      return;
     }
   }, [navigate]);
 
@@ -42,10 +42,6 @@ export default function DashBoard() {
         setCurrentUser(response.data.data);
       } catch (error) {
         console.error("Error fetching current user:", error);
-        if (error.response && error.response.status === 401) {
-          console.warn("Unauthorized! Redirecting to login...");
-          navigate('/signin');
-        }
       }
     }
     fetchUser();
@@ -73,7 +69,10 @@ export default function DashBoard() {
           <img 
             className='rounded-[50%] '
             src={currentUser.imageUrl} 
-            alt="profile image" 
+            alt="image"
+            onClick={()=>{
+              navigate('/account');
+            }}
           />
         </div>
       </Navbar>

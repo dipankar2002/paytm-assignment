@@ -7,10 +7,10 @@ const { hashPassword, comparePassword } = require('../middleware/hashPass');
 const router = express.Router();
 
 router.put('/', authMiddleware ,async (req, res) => {
-  const { password, firstName, lastName } = req.body;
+  const { username, password, firstName, lastName } = req.body;
   const id = req.id;
 
-  const userValidation = updateBody.safeParse({ password, firstName, lastName });
+  const userValidation = updateBody.safeParse({ username, password, firstName, lastName });
   if(!userValidation.success) {
     return res.status(411).json({
       message: "Error while updating information",
@@ -21,9 +21,10 @@ router.put('/', authMiddleware ,async (req, res) => {
   const oldUser = User.findOne({_id: id});
 
   await User.updateOne({_id: id}, {
-    password: password? password: oldUser.password,
-    firstName: firstName? firstName: oldUser.firstName,
-    lastName: lastName? lastName: oldUser.lastName
+    username: username? username : oldUser.username,
+    password: password? password : oldUser.password,
+    firstName: firstName? firstName : oldUser.firstName,
+    lastName: lastName? lastName : oldUser.lastName
   })
   res.status(200).json({
     message: "User information updated successfully",

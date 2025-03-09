@@ -3,12 +3,14 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import InputCompo from '../Components/InputCompo';
 import axios from 'axios';
 import { mainUrl } from '../Api/apiFetch';
+import RoundTimer from '../Components/TimerAnimation';
 
 export default function SendMoney() {
   const navigate = useNavigate();
-  const [ amount, setAmount ] = useState(0);
+  const [ amount, setAmount ] = useState(null);
   const [ currentUser, setCurrentUser ] = useState({});
-  const [ recevier, setRecevier ] = useState({});
+  const [ paymentSubmit, setPaymentSubmit ] = useState(null);
+  const [ loading, setLoading ] = useState(false);
   const token = localStorage.getItem('token');
 
   const [searchParams] = useSearchParams();
@@ -47,6 +49,7 @@ export default function SendMoney() {
 
   async function onSubmit(e) {
     e.preventDefault();
+    setLoading(true);
 
     const response = await axios.post(`${mainUrl}/api/v1/account/transfer`,
       {
@@ -61,6 +64,25 @@ export default function SendMoney() {
       }
     )
     console.log(response.data);
+    setPaymentSubmit(response.data);
+    setLoading(false);
+  }
+
+  if(paymentSubmit) {
+    return (<TransferResponse res={paymentSubmit}>
+      {paymentSubmit.success?
+        <button
+          className='bg-blue-500 w-[20%] py-2 mx-2 text-white font-bold rounded-md mt-6'
+          onClick={() => {setPaymentSubmit(null)}}
+        >Back</button> :
+        <button
+        className='bg-blue-500 w-[20%] py-2 mx-2 text-white font-bold rounded-md mt-6'
+        onClick={() => navigate(`/`)}
+      >Retry</button>
+
+      }
+      
+    </TransferResponse>);
   }
 
   return (
@@ -77,11 +99,14 @@ export default function SendMoney() {
         <InputCompo type={"number"} value={amount} setValue={setAmount}>
           Amount (in Rs)
         </InputCompo>
-        <button className="bg-blue-500 w-[80%] py-2 text-white font-bold rounded-md mt-6">Send</button>
+        {loading && <div className='my-4 mx-auto'><RoundTimer/></div>}
+        <button 
+          className="bg-blue-500 w-[80%] py-2 text-white font-bold rounded-md mt-6"
+        >Send</button>
         <footer className='text-center pt-2'>
           Want to go back to Dashboard page -
           <Link
-            to="/dashboard"
+            to="/"
             className='text-blue-500 mx-2'
           > Back </Link>
         </footer>
@@ -91,7 +116,6 @@ export default function SendMoney() {
 }
 
 function ShowReciver({name}) {
-
   return (
     <div className='flex w-[80%] mx-auto items-center mb-4'>
       <div className={`bg-green-400 w-12 h-12 rounded-[50%] text-3xl text-center text-white py-1`}>
@@ -105,4 +129,16 @@ function ShowReciver({name}) {
   )
 }
 
-
+function TransferResponse({children, res}) {
+  return (
+    <div className=' flex justify-center items-center w-[100vw] h-[100vh]'>
+      <div className='bg-white w-[20%] py-10 rounded-md text-center shadow-2xl'>
+        <h1 className='text-3xl font-bold pb-2'>{res.message}</h1>
+        <div className='text-4xl mt-4'>{res.success?'✅':'😿'}</div>
+        <div className='my-2 mx-auto'>
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}

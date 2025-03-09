@@ -4,6 +4,7 @@ import { mainUrl } from '../Api/apiFetch';
 
 export default function Balance() {
     const [ curentBalance, setCurrentBalance ] = useState(0);
+    const [ loading, setLoading ] = useState(true);
     const token = localStorage.getItem('token');
   useEffect(() => {
     if (!token) return;
@@ -19,6 +20,7 @@ export default function Balance() {
               },
             }
           );
+          setLoading(false);
           setCurrentBalance(response.data.data.balance);
         } catch (error) {
           console.error("Error fetching balance:", error);
@@ -33,7 +35,7 @@ export default function Balance() {
 
   return (
     <div className='text-2xl mx-6 border-b-2 border-gray-200 pb-2'>
-      Your Curent Balance is: ₹<span className='font-bold'>{curentBalance}</span>
+      Your Curent Balance is: ₹<span className='font-bold'>{loading? 'XXXX.XX' :curentBalance}</span>
     </div>
   )
 }
