@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from '../Components/Navbar';
 import Balance from '../Components/Balance';
 import UsersCompo from '../Components/UsersCompo';
+import { mainUrl } from '../Api/apiFetch';
 
 
 export default function DashBoard() {
@@ -25,7 +26,7 @@ export default function DashBoard() {
     async function fetchUser() {
       try {
         const response = await axios.post(
-          'http://localhost:3000/api/v1/user/currentUser',
+          `${mainUrl}/api/v1/user/currentUser`,
           {},
           {
             headers: {

@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import InputCompo from '../Components/InputCompo';
 import axios from 'axios';
+import { mainUrl } from '../Api/apiFetch';
 
 export default function SendMoney() {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ export default function SendMoney() {
   async function onSubmit(e) {
     e.preventDefault();
 
-    const response = await axios.post('http://localhost:3000/api/v1/account/transfer',
+    const response = await axios.post(`${mainUrl}/api/v1/account/transfer`,
       {
         to: id,
         amount: amount

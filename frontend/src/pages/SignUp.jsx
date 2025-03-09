@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import InputCompo from '../Components/InputCompo';
+import { mainUrl } from '../Api/apiFetch';
 
 export default function SignUp() {
   localStorage.removeItem('token');
@@ -14,7 +15,7 @@ export default function SignUp() {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch('http://localhost:3000/api/v1/user/signup', {
+    const response = await fetch(`${mainUrl}/api/v1/user/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

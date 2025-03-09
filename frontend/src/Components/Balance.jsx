@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { mainUrl } from '../Api/apiFetch';
 
 export default function Balance() {
     const [ curentBalance, setCurrentBalance ] = useState(0);
@@ -10,7 +11,7 @@ export default function Balance() {
       async function fetchBalance() {
         try {
           const response = await axios.get(
-            'http://localhost:3000/api/v1/account/balance',
+            `${mainUrl}/api/v1/account/balance`,
             {
               headers: {
                 "Content-Type": "application/json",

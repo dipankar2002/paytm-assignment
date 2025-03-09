@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { mainUrl } from '../Api/apiFetch';
 
 export default function UsersCompo({currentUserId}) {
   const [ users, setUsers ] = useState([]);
@@ -8,10 +9,12 @@ export default function UsersCompo({currentUserId}) {
 
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/v1/user/bulk?filter=" + filter.toLowerCase())
-      .then(response => {
-        setUsers(response.data.data);
-      })
+    async function fetctUsers() {
+      const response = await axios.get(`${mainUrl}/api/v1/user/bulk?filter=` + filter.toLowerCase());
+      const filterUser = await (response.data.data).filter((ele) => ele._id !== currentUserId);
+      setUsers(filterUser);
+    }
+    fetctUsers();
   },[filter]);
 
   return (
