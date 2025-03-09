@@ -29,7 +29,7 @@ export default function SignUp() {
 
     if(data.token) {
       localStorage.setItem('token', data.token);
-      navigate('/dashboard', { replace: true });
+      navigate('/', { replace: true });
 
     } else {
       alert(data.message);
