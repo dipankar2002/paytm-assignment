@@ -6,7 +6,7 @@ const authMiddleware = require('../middleware/middleware');
 const { hashPassword, comparePassword } = require('../middleware/hashPass');
 const router = express.Router();
 
-router.put('/', authMiddleware ,async (req, res) => {
+router.put('/update', authMiddleware ,async (req, res) => {
   const { username, password, firstName, lastName } = req.body;
   const id = req.id;
 
