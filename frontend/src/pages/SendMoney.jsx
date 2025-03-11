@@ -4,6 +4,7 @@ import InputCompo from '../Components/InputCompo';
 import axios from 'axios';
 import { mainUrl } from '../Api/apiFetch';
 import RoundTimer from '../Components/TimerAnimation';
+import AccessDenied from '../Components/AccessDeniedCompo';
 
 export default function SendMoney() {
   const navigate = useNavigate();
@@ -46,6 +47,17 @@ export default function SendMoney() {
     }
     fetchUser();
   },[token, navigate]);
+
+  if(!token) {
+      return (
+        <AccessDenied>
+          <button
+            className='bg-blue-500 w-[80%] py-2 text-white font-bold rounded-md mt-6'
+            onClick={() => navigate('/signin')}
+          >Sign In</button>
+        </AccessDenied>
+      )
+    }
 
   async function onSubmit(e) {
     e.preventDefault();
