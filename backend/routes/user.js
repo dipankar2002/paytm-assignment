@@ -10,7 +10,12 @@ router.put('/update', authMiddleware ,async (req, res) => {
   const { username, password, firstName, lastName } = req.body;
   const id = req.id;
 
-  const userValidation = updateBody.safeParse({ username, password, firstName, lastName });
+  const userValidation = updateBody.safeParse({ 
+    username: username? username : null, 
+    password: password? password : null, 
+    firstName: firstName? firstName : null, 
+    lastName: lastName? lastName : null
+  });
   if(!userValidation.success) {
     return res.status(411).json({
       message: "Error while updating information",
