@@ -3,6 +3,141 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { mainUrl } from '../Api/apiFetch';
 
+const demo = [
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67cb29bd7effabbfeb0efe50"
+    },
+    "username": "dip@gmail.com",
+    "password": "$2b$10$LsSgeBZQWbTIILSAfkxPL.fxucrKZc9f2mjcul6kGPpQUT27A/g4W",
+    "firstName": "dip",
+    "lastName": "ganguly",
+    "imageUrl": "https://i.pravatar.cc/48?u=1741367741138",
+    "__v": 0
+  }
+]
+
 export default function UsersCompo({currentUserId}) {
   const [ users, setUsers ] = useState([]);
   const [ filter, setFilter ] = useState("");
@@ -32,23 +167,25 @@ export default function UsersCompo({currentUserId}) {
   
 
   return (
-    <div className='mx-6 mt-2'>
+    <div className='mx-6 mt-2 h-[74vh] overflow-hidden'>
       <span className='text-2xl font-bold'>Users</span>
-      <search className='flex justify-between items-center my-2 border-2 rounded-md'>
+      <search className='sticky top-2 bg-white flex justify-between items-center my-2 border-2 rounded-md'>
         <input 
-          className=' px-2 py-2 w-[100%] focus:outline-none'
+          className=' px-3 py-3 w-[100%] focus:outline-none'
           type="text" 
           placeholder="Search Users"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        {filter && 
+        {filter ?
           <button 
             className=' font-bold text-xl mr-3'
             onClick={()=>setFilter("")}
-          >X</button>}
+          >X</button>
+          : <button className=' font-bold text-xl mr-3'
+        >Search</button>}
       </search>
-      <main>
+      <main className=' md:mx-24 pb-4 scrollbar-hide overflow-auto'>
           {loading && <h1 className='text-black text-4xl text-center'>Loading...</h1>}
           {users.filter((ele) => ele._id !== currentUserId).map((ele,i) => 
             <ShowUsers 
@@ -86,7 +223,7 @@ function ShowUsers({image, id, firstName, lastName}) {
         onClick={() => {
           navigate("/send?id=" + id + "&name=" + name);
         }}
-      >Send Money</button>
+      >Send</button>
     </div>
   )
 }

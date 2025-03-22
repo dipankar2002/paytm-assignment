@@ -63,7 +63,7 @@ export default function DashBoard() {
     <div>
       <Navbar>
         <div className='flex items-center text-lg'>
-          Hello, <span className='mx-2'>{currentUser.firstName}</span>
+          <span className='mx-2 text-2xl capitalize font-medium'>{currentUser.firstName}</span>
           {/* <div className='bg-gray-400 w-10 h-10 rounded-[50%] text-center text-white pt-1'>
             {currentUser.firstName}
           </div> */}
@@ -77,7 +77,7 @@ export default function DashBoard() {
           />
         </div>
       </Navbar>
-      <main className='bg-white w-[99%] h-[84vh] mx-auto my-2 p-4 rounded-md shadow-md'>
+      <main className='bg-white w-[99%] mx-auto my-2 p-2 rounded-md shadow-md'>
         <Balance/>
         <UsersCompo currentUserId={currentUser._id}/>
       </main>

@@ -37,12 +37,12 @@ export default function SignUp() {
   }
 
   return (
-    <div className=' flex justify-center items-center w-[100vw] h-[100vh]'>
+    <div className=' flex justify-center items-center w-[100vw] h-[90vh] lg:h-[100vh]'>
       <form 
-        className='bg-white w-[30%] py-10 rounded-md text-center shadow-2xl'
+        className='bg-white w-[80%] md:w-[50%] lg:w-[30%] py-5 rounded-md text-center shadow-2xl'
         onSubmit={onSubmit}
       >
-        <header className='text-center pb-6 px-10'>
+        <header className='text-center pb-2 px-10'>
           <h1 className=' text-3xl font-bold pb-2'>Sign Up</h1>
           <div className='text-xl text-gray-600'>Enter your information to create an account</div>
         </header>

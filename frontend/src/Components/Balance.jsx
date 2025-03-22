@@ -35,7 +35,7 @@ export default function Balance() {
 
   return (
     <div className='text-2xl mx-6 border-b-2 border-gray-200 pb-2'>
-      Your Curent Balance is: ₹<span className='font-bold'>{loading? 'XXXX.XX' :curentBalance}</span>
+      Your Curent Balance is: ₹<span className='font-bold text-4xl'>{loading? 'XXXX.XX' :curentBalance}</span>
     </div>
   )
 }

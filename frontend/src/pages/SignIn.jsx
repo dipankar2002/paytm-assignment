@@ -33,9 +33,9 @@ export default function SignIn() {
   }
 
   return (
-    <div className=' flex justify-center items-center w-[100vw] h-[100vh]'>
+    <div className=' flex justify-center items-center w-[100vw] h-[90vh] lg:h-[100vh]'>
       <form 
-        className='bg-white w-[30%] py-10 rounded-md text-center shadow-2xl'
+        className='bg-white w-[80%] md:w-[50%] lg:w-[30%] py-5 rounded-md text-center shadow-2xl'
         onSubmit={onSubmit}
       >
         <header className='text-center pb-6 px-10'>

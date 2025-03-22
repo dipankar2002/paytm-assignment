@@ -71,17 +71,18 @@ export default function Account() {
         </div>
       </Navbar>
       {loading && <h1 className='text-black bg-white py-10 text-4xl text-center'>Loading...</h1>}
-      {!loading && <main className='bg-white grid grid-cols-1 md:grid-cols-[40%_60%] w-[99%] h-[84vh] mx-auto my-2 p-4 rounded-md shadow-md'>
-        <LeftSec>
-          <img 
-            className='w-[30%] rounded-[50%] mx-auto'
-            src={currentUser.imageUrl} 
-            alt="image" 
-          />
-          <h1 className='text-4xl font-bold mt-6'>{currentUser.username}</h1>
-        </LeftSec>
-        <RightSec currentUser={currentUser}/>
-      </main>}
+      {!loading && 
+        <main className='bg-white grid grid-cols-1 md:grid-cols-[40%_60%] w-[99%] mx-auto my-2 p-4 rounded-md shadow-md'>
+          <LeftSec>
+            <img 
+              className='w-[30%] rounded-[50%] mx-auto'
+              src={currentUser.imageUrl} 
+              alt="image" 
+            />
+            <h1 className='text-4xl font-bold mt-6'>{currentUser.username}</h1>
+          </LeftSec>
+          <RightSec currentUser={currentUser}/>
+        </main>}
     </div>
   )
 }
@@ -135,7 +136,7 @@ function RightSec({currentUser}) {
       {editSec && 
       <UpdateUserDetails currentUser={currentUser} setEditSec={setEditSec}/>}
 
-      <main className=' px-10 pt-10'>
+      <main className=' px-10 pt-10 pb-10'>
         <button 
           className='text-xl text-blue-600 underline hover:text-black'
           onClick={()=>setEditSec((prev)=>!prev)}  
@@ -174,6 +175,8 @@ function UpdateUserDetails({currentUser, setEditSec}) {
   async function onSubmit(e) {
     setLoading(true);
     e.preventDefault();
+    const check = window.confirm("Are you sure you want to update?");
+    if (!check) return setEditSec(false);
     try {
       const response = await axios.put(`${mainUrl}/api/v1/user/update`,
         { 
@@ -199,74 +202,86 @@ function UpdateUserDetails({currentUser, setEditSec}) {
 
   return (
     <form 
-      className='bg-blue-200 shadow-2xl rounded-xl border-2 px-4 py-4'
-      onSubmit={onSubmit}
-    >
-      {loading && <h1 className='text-black text-4xl text-center'>Loading...</h1>}
-      <table className="border-separate border-spacing-2">
-        <tbody>
-          <tr className='my-2 text-xl'>
-            <td>First Name : </td>
-            <td>
-              <input 
-                className='border-2 mx-2 px-2 font-bold'
-                type="text"
-                placeholder={currentUser.firstName}
-                value={updateFN}
-                onChange={(e)=>setUpdateFN(e.target.value)}
-              />
-            </td>
-          </tr>
-          <tr className='my-2 text-xl'>
-            <td>Last Name : </td>
-            <td>
-              <input 
-                className='border-2 mx-2 px-2 font-bold'
-                type="text"
-                placeholder={currentUser.lastName}
-                value={updateLN}
-                onChange={(e)=>setUpdateLN(e.target.value)}
-              />
-            </td>
-          </tr>
-          <tr className='my-2 text-xl'>
-            <td>Username : </td>
-            <td>
-              <input 
-                className='border-2 mx-2 px-2 font-bold'
-                type="text"
-                placeholder={currentUser.username}
-                value={updateUN}
-                onChange={(e)=>setUpdateUN(e.target.value)}
-              />
-            </td>
-          </tr>
-          <tr className='my-2 text-xl'>
-            <td>Password : </td>
-            <td>
-              <input 
-                className='border-2 mx-2 px-2 font-bold'
-                type="text"
-                placeholder={`********`}
-                value={updateP}
-                onChange={(e)=>setUpdateP(e.target.value)}
-              />
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          {updateFN || updateLN || updateUN || updateP ?
-            <tr>
-              <td>
-                <button
-                  className='bg-blue-700 px-2 p-1 rounded-md text-white font-bold'
-                >Update</button>
-              </td>
-            </tr> :
-            null
-          }
-        </tfoot>
-      </table>
-    </form>
+  className="bg-blue-200 shadow-2xl rounded-xl border-2 px-6 py-6 w-full max-w-2xl mx-auto"
+  onSubmit={onSubmit}
+>
+  {loading && <h1 className="text-black text-4xl text-center">Loading...</h1>}
+
+  <table className="border-separate border-spacing-3 w-full">
+    <tbody className="text-lg md:text-xl">
+      {/* First Name */}
+      <tr className="my-2">
+        <td className="pr-2 w-30">First Name:</td>
+        <td>
+          <input 
+            className="border-2 mx-2 px-2 py-1 font-bold w-full md:w-[70%] rounded-md"
+            type="text"
+            placeholder={currentUser.firstName}
+            value={updateFN}
+            onChange={(e) => setUpdateFN(e.target.value)}
+          />
+        </td>
+      </tr>
+
+      {/* Last Name */}
+      <tr className="my-2">
+        <td className="pr-2 w-30">Last Name:</td>
+        <td>
+          <input 
+            className="border-2 mx-2 px-2 py-1 font-bold w-full md:w-[70%] rounded-md"
+            type="text"
+            placeholder={currentUser.lastName}
+            value={updateLN}
+            onChange={(e) => setUpdateLN(e.target.value)}
+          />
+        </td>
+      </tr>
+
+      {/* Username */}
+      <tr className="my-2">
+        <td className="pr-2 w-30">Username:</td>
+        <td>
+          <input 
+            className="border-2 mx-2 px-2 py-1 font-bold w-full md:w-[70%] rounded-md"
+            type="text"
+            placeholder={currentUser.username}
+            value={updateUN}
+            onChange={(e) => setUpdateUN(e.target.value)}
+          />
+        </td>
+      </tr>
+
+      {/* Password */}
+      <tr className="my-2">
+        <td className="pr-2 w-30">Password:</td>
+        <td>
+          <input 
+            className="border-2 mx-2 px-2 py-1 font-bold w-full md:w-[70%] rounded-md"
+            type="password"
+            placeholder="********"
+            value={updateP}
+            onChange={(e) => setUpdateP(e.target.value)}
+          />
+        </td>
+      </tr>
+    </tbody>
+
+    {/* Update Button */}
+    <tfoot>
+      {updateFN || updateLN || updateUN || updateP ? (
+        <tr>
+          <td colSpan="2" className="text-center">
+            <button
+              className="bg-blue-700 hover:bg-blue-800 px-4 py-2 mt-4 rounded-md text-white font-bold transition-all"
+            >
+              Update
+            </button>
+          </td>
+        </tr>
+      ) : null}
+    </tfoot>
+  </table>
+</form>
+
   )
 }

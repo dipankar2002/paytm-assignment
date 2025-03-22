@@ -100,7 +100,7 @@ export default function SendMoney() {
   return (
     <div className=' flex justify-center items-center w-[100vw] h-[100vh]'>
       <form 
-        className='bg-white w-[30%] py-10 rounded-md text-center shadow-2xl'
+        className='bg-white w-[80%] md:w-[50%] lg:w-[30%] py-10 rounded-md text-center shadow-2xl'
         onSubmit={onSubmit}
       >
         <header className='text-center pb-6 px-10'>
@@ -144,7 +144,7 @@ function ShowReciver({name}) {
 function TransferResponse({children, res}) {
   return (
     <div className=' flex justify-center items-center w-[100vw] h-[100vh]'>
-      <div className='bg-white w-[20%] py-10 rounded-md text-center shadow-2xl'>
+      <div className='bg-white  w-[80%] md:w-[50%] lg:w-[30%] py-10 rounded-md text-center shadow-2xl'>
         <h1 className='text-3xl font-bold pb-2'>{res.message}</h1>
         <div className='text-4xl mt-4'>{res.success?'✅':'😿'}</div>
         <div className='my-2 mx-auto'>
